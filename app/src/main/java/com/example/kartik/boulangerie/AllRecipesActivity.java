@@ -27,8 +27,7 @@ public class AllRecipesActivity extends AppCompatActivity {
     String mJSONURLString = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
     JSONArray jsonArray;
     ArrayList<Recipe> recipes = new ArrayList<>();
-    ArrayList<Step> steps = new ArrayList<>();
-    ArrayList<Ingredient> ingredients = new ArrayList<>();
+    int i, j;
 
 
     int recipeId, servings, quantity, stepId,noOfIngredients, noOfSteps;
@@ -81,15 +80,12 @@ public class AllRecipesActivity extends AppCompatActivity {
         if(recipes!=null)
             recipes.clear();
 
-        for(int i = 0; i<jsonArray.length(); i++){
+        for(i = 0; i<jsonArray.length(); i++){
 
             noOfIngredients = 0;
             noOfSteps = 0;
 
-            if(steps!=null)
-                steps.clear();
-            if(ingredients!=null)
-                ingredients.clear();
+
             try {
                 recipeObject = jsonArray.getJSONObject(i);
 
@@ -99,9 +95,10 @@ public class AllRecipesActivity extends AppCompatActivity {
                 servings = recipeObject.getInt("servings");
                 recipeImage= recipeObject.getString("image");
 
+                ArrayList<Ingredient> ingredients= new ArrayList<>();
                 ingredientArray = recipeObject.getJSONArray("ingredients");
-                for(int j = 0; j<ingredientArray.length(); j++){
-                    ingredientObject = ingredientArray.getJSONObject(i);
+                for(j = 0; j<ingredientArray.length(); j++){
+                    ingredientObject = ingredientArray.getJSONObject(j);
                     quantity = ingredientObject.getInt("quantity");
                     measure = ingredientObject.getString("measure");
                     ingredient = ingredientObject.getString("ingredient");
@@ -109,10 +106,10 @@ public class AllRecipesActivity extends AppCompatActivity {
                     noOfIngredients++;
                 }
 
-
+                ArrayList<Step> steps = new ArrayList<>();
                 stepArray = recipeObject.getJSONArray("steps");
-                for(int j = 0; j<stepArray.length(); j++){
-                    stepObject = stepArray.getJSONObject(i);
+                for(j = 0; j<stepArray.length(); j++){
+                    stepObject = stepArray.getJSONObject(j);
                     stepId = stepObject.getInt("id");
                     shortDescription = stepObject.getString("shortDescription");
                     description = stepObject.getString("description");
@@ -124,6 +121,7 @@ public class AllRecipesActivity extends AppCompatActivity {
 
                 recipes.add(new Recipe(recipeId, recipeName, ingredients, steps, servings, recipeImage, noOfIngredients, noOfSteps));
                 Log.d("Recipe added: ", recipeName);
+//                steps.clear();
 
             } catch (JSONException e) {
                 e.printStackTrace();

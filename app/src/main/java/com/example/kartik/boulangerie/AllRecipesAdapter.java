@@ -1,6 +1,7 @@
 package com.example.kartik.boulangerie;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ public class AllRecipesAdapter extends RecyclerView.Adapter<AllRecipesAdapter.Re
     private Context context;
     private LayoutInflater inflater;
     String summaryString;
+
 
     public AllRecipesAdapter(ArrayList<Recipe> recipes, Context context) {
         this.recipes = recipes;
@@ -62,6 +64,15 @@ public class AllRecipesAdapter extends RecyclerView.Adapter<AllRecipesAdapter.Re
                     })
                     .into(holder.recipeImage);
         }
+
+        holder.recipeCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, RecipeOverviewActivity.class);
+                intent.putExtra("recipe", recipe);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
