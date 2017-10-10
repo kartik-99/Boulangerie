@@ -1,5 +1,9 @@
 package com.example.kartik.boulangerie;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +21,13 @@ import java.util.ArrayList;
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
 
     ArrayList<Step> steps;
+    boolean twoPane;
+    Context c;
 
-    public StepAdapter(ArrayList<Step> steps) {
+    public StepAdapter(ArrayList<Step> steps, boolean twoPane, Context c) {
         this.steps = steps;
+        this.twoPane = twoPane;
+        this.c = c;
     }
 
     @Override
@@ -30,10 +38,23 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
     }
 
     @Override
-    public void onBindViewHolder(StepAdapter.StepHolder holder, int position) {
-        Step step = steps.get(position);
+    public void onBindViewHolder(StepAdapter.StepHolder holder, final int position) {
+        final Step step = steps.get(position);
         holder.mIdView.setText(Integer.toString(step.getId()));
         holder.mContentView.setText(step.getShortDescription());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(twoPane){
+                }else{
+                    Intent intent = new Intent(c, DetailActivity.class);
+                    intent.putExtra("step", step);
+                    intent.putExtra("index", position);
+                    c.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
