@@ -18,9 +18,6 @@ import com.example.kartik.boulangerie.Objects.Recipe;
 
 import java.util.ArrayList;
 
-/**
- * Created by Kartik on 07-10-2017.
- */
 
 public class AllRecipesAdapter extends RecyclerView.Adapter<AllRecipesAdapter.RecipePlaceHolder> {
 

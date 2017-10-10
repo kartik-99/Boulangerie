@@ -2,6 +2,8 @@ package com.example.kartik.boulangerie;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.kartik.boulangerie.Objects.Recipe;
 import com.example.kartik.boulangerie.Objects.Step;
 
 import java.util.ArrayList;
@@ -23,11 +26,13 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
     ArrayList<Step> steps;
     boolean twoPane;
     Context c;
+    Recipe recipe;
 
-    public StepAdapter(ArrayList<Step> steps, boolean twoPane, Context c) {
+    public StepAdapter(ArrayList<Step> steps, boolean twoPane, Context c, Recipe recipe) {
         this.steps = steps;
         this.twoPane = twoPane;
         this.c = c;
+        this.recipe = recipe;
     }
 
     @Override
@@ -49,7 +54,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
                 if(twoPane){
                 }else{
                     Intent intent = new Intent(c, DetailActivity.class);
-                    intent.putExtra("step", step);
+                    Bundle args = new Bundle();
+                    intent.putExtra("recipe", recipe);
                     intent.putExtra("index", position);
                     c.startActivity(intent);
                 }

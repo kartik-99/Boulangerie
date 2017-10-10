@@ -33,7 +33,8 @@
             android:layout_weight="0.5"
             android:text=" Previous "
             android:gravity="center"
-            android:textSize="25dp"/>
+            android:textSize="25dp"
+            android:onClick="loadPreviousStep"/>
 
         <TextView
             android:id="@+id/next_textView"
@@ -42,7 +43,8 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text=" Next "
-            android:textSize="25dp" />
+            android:textSize="25dp"
+            android:onClick="loadNextStep"/>
 
 
     </LinearLayout>

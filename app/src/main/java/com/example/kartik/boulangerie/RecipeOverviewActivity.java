@@ -63,6 +63,6 @@ public class RecipeOverviewActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new StepAdapter(recipe.getSteps(), mTwoPane, this));
+        recyclerView.setAdapter(new StepAdapter(recipe.getSteps(), mTwoPane, this, recipe));
     }
 }
