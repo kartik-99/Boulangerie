@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
     boolean twoPane;
     Context c;
     Recipe recipe;
+    FragmentTransaction ft;
 
     public StepAdapter(ArrayList<Step> steps, boolean twoPane, Context c, Recipe recipe) {
         this.steps = steps;
@@ -52,9 +54,12 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
             @Override
             public void onClick(View v) {
                 if(twoPane){
+                    ft = ((FragmentActivity)c).getSupportFragmentManager().beginTransaction();
+                    Fragment fragment= StepDetailFragment.newInstance(step);
+                    ft.replace(R.id.item_detail_container, fragment);
+                    ft.commit();
                 }else{
                     Intent intent = new Intent(c, DetailActivity.class);
-                    Bundle args = new Bundle();
                     intent.putExtra("recipe", recipe);
                     intent.putExtra("index", position);
                     c.startActivity(intent);

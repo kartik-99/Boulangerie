@@ -25,11 +25,13 @@ public class AllRecipesAdapter extends RecyclerView.Adapter<AllRecipesAdapter.Re
     private Context context;
     private LayoutInflater inflater;
     String summaryString;
+    Boolean appOrWidget;
 
 
-    public AllRecipesAdapter(ArrayList<Recipe> recipes, Context context) {
+    public AllRecipesAdapter(ArrayList<Recipe> recipes, Context context, Boolean appOrWidget) {
         this.recipes = recipes;
         this.context = context;
+        this.appOrWidget = appOrWidget;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -65,9 +67,11 @@ public class AllRecipesAdapter extends RecyclerView.Adapter<AllRecipesAdapter.Re
         holder.recipeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, RecipeOverviewActivity.class);
-                intent.putExtra("recipe", recipe);
-                context.startActivity(intent);
+                if (appOrWidget) {
+                    Intent intent = new Intent(context, RecipeOverviewActivity.class);
+                    intent.putExtra("recipe", recipe);
+                    context.startActivity(intent);
+                }
             }
         });
     }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -26,7 +27,7 @@ public class AllRecipesActivity extends AppCompatActivity {
 
     String mJSONURLString = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
     JSONArray jsonArray;
-    ArrayList<Recipe> recipes = new ArrayList<>();
+    static ArrayList<Recipe> recipes = new ArrayList<>();
     int i, j;
 
 
@@ -35,23 +36,35 @@ public class AllRecipesActivity extends AppCompatActivity {
     JSONObject recipeObject, ingredientObject, stepObject;
     JSONArray ingredientArray, stepArray;
     RecyclerView recyclerView;
+    AllRecipesAdapter recipesAdapter;
+    GridView gridView;
+    Boolean phone;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_recipes);
-        recyclerView = (RecyclerView) findViewById(R.id.all_recipes_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        makeVolleyRequest();
 
 
+        makeVolleyRequest(true);
+
+        Log.d("Recipe size : ", Integer.toString(this.recipes.size()));
+
+        if(findViewById(R.id.all_recipes_recyclerview)!=null){
+            phone = true;
+            recyclerView = (RecyclerView) findViewById(R.id.all_recipes_recyclerview);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }else if(findViewById(R.id.all_recipes_gridview)!= null){
+            phone = false;
+            gridView = (GridView)findViewById(R.id.all_recipes_gridview);
+        }
 
 
     }
 
-    private void makeVolleyRequest() {
+    protected void makeVolleyRequest(final Boolean app) {
         // Initialize a new RequestQueue instance
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -61,7 +74,7 @@ public class AllRecipesActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray array) {
                         jsonArray = array;
-                        parseJsonArray();
+                        parseJsonArray(app);
                     }
                 },
                 new Response.ErrorListener() {
@@ -76,9 +89,8 @@ public class AllRecipesActivity extends AppCompatActivity {
 
     }
 
-    private void parseJsonArray() {
-        if(recipes!=null)
-            recipes.clear();
+    private void parseJsonArray(boolean app) {
+
 
         for(i = 0; i<jsonArray.length(); i++){
 
@@ -119,9 +131,8 @@ public class AllRecipesActivity extends AppCompatActivity {
                     noOfSteps++;
                 }
 
-                recipes.add(new Recipe(recipeId, recipeName, ingredients, steps, servings, recipeImage, noOfIngredients, noOfSteps));
+                this.recipes.add(new Recipe(recipeId, recipeName, ingredients, steps, servings, recipeImage, noOfIngredients, noOfSteps));
                 Log.d("Recipe added: ", recipeName);
-//                steps.clear();
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -131,7 +142,13 @@ public class AllRecipesActivity extends AppCompatActivity {
 
         }
 
-        AllRecipesAdapter recipesAdapter = new AllRecipesAdapter(recipes, this);
-        recyclerView.setAdapter(recipesAdapter);
+        if(phone){
+            recipesAdapter = new AllRecipesAdapter(recipes, this, app);
+            recyclerView.setAdapter(recipesAdapter);
+        }else{
+            AllRecipesGridAdapter gridAdapter = new AllRecipesGridAdapter(this, recipes);
+            gridView.setAdapter(gridAdapter);
+        }
+
     }
 }

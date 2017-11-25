@@ -31,45 +31,58 @@ public class DetailActivity extends AppCompatActivity {
         recipe = intent.getParcelableExtra("recipe");
         steps = recipe.getSteps();
         totalSteps = steps.size();
-        index = intent.getIntExtra("index", 1);
+        index = intent.getIntExtra("index", 0);
 
         previous = (TextView) findViewById(R.id.prev_textview);
         next = (TextView) findViewById(R.id.next_textView);
 
-        if(index == 0)
+        if(index == -1) {
+            setFragment(false);
             previous.setVisibility(View.INVISIBLE);
-        if(index == totalSteps-1)
+            return;
+        }
+        else if(index == totalSteps-1)
             next.setVisibility(View.INVISIBLE);
-        setFragment();
+        setFragment(true);
     }
 
-    public void setFragment(){
-        step = steps.get(index);
-        ft = getSupportFragmentManager().beginTransaction();
-        Fragment fragment= StepDetailFragment.newInstance(step);
-        ft.replace(R.id.item_detail_container, fragment);
-        ft.commit();
+    public void setFragment(Boolean status){
+        if(status){
+            step = steps.get(index);
+            ft = getSupportFragmentManager().beginTransaction();
+            Fragment fragment= StepDetailFragment.newInstance(step);
+            ft.replace(R.id.item_detail_container, fragment);
+            ft.commit();
+        }else{
+            ft = getSupportFragmentManager().beginTransaction();
+            Fragment fragment= IngredientDetailFragment.newInstance(recipe);
+            ft.replace(R.id.item_detail_container, fragment);
+            ft.commit();
+        }
     }
 
     public void loadPreviousStep(View view) {
-        if (index == 0)
-            return;
-        if(index == 1)
-            previous.setVisibility(View.INVISIBLE);
-        if (index == totalSteps-1)
-            next.setVisibility(View.VISIBLE);
         index--;
-        setFragment();
+        if(index == -1){
+            setFragment(false);
+            previous.setVisibility(View.INVISIBLE);
+            return;
+        }
+        if(index == totalSteps -2)
+            next.setVisibility(View.VISIBLE);
+        setFragment(true);
+
     }
 
     public void loadNextStep(View view) {
-        if (index == totalSteps-1)
-            return;
-        if(index == totalSteps-2)
-            next.setVisibility(View.INVISIBLE);
-        if(index == 0)
-            previous.setVisibility(View.VISIBLE);
         index++;
-        setFragment();
+        if(index ==0)
+            previous.setVisibility(View.VISIBLE);
+        if(index == totalSteps-1)
+            next.setVisibility(View.GONE);
+        setFragment(true);
+
     }
+
+
 }

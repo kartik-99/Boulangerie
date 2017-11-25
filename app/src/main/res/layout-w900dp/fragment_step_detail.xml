@@ -8,12 +8,12 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="400dp">
 
         <TextView
             android:id="@+id/not_available"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="No video or thumbnail\navailable"
             android:background="#000"
@@ -23,13 +23,13 @@
             android:id="@+id/thumbnail"
             android:background="#000"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="match_parent" />
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/player_view"
             android:focusable="true"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
 
