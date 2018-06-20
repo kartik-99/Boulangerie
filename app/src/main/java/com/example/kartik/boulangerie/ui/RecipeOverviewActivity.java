@@ -1,5 +1,8 @@
 package com.example.kartik.boulangerie.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +18,8 @@ import android.widget.TextView;
 import com.example.kartik.boulangerie.objects.Recipe;
 import com.example.kartik.boulangerie.R;
 import com.example.kartik.boulangerie.adapters.StepAdapter;
+import com.example.kartik.boulangerie.widget.IngredientsWidgetProvider;
+import com.example.kartik.boulangerie.widget.WidgetUpdateService;
 
 import butterknife.ButterKnife;
 public class RecipeOverviewActivity extends AppCompatActivity {
@@ -24,7 +29,7 @@ public class RecipeOverviewActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-    Recipe recipe;
+    static Recipe recipe;
     TextView ingredients_textview;
     FragmentTransaction ft;
 
@@ -65,9 +70,21 @@ public class RecipeOverviewActivity extends AppCompatActivity {
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
+        updateWorkoutsWidget(this);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new StepAdapter(recipe.getSteps(), mTwoPane, this, recipe));
+    }
+
+    public static void updateWorkoutsWidget(Context context) {
+        Intent intent = new Intent(context, IngredientsWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(WidgetUpdateService.FROM_ACTIVITY_INGREDIENTS_LIST, recipe.getIngredients());
+        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, IngredientsWidgetProvider.class));
+        if (ids != null && ids.length > 0) {
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+            context.sendBroadcast(intent);
+        }
     }
 }

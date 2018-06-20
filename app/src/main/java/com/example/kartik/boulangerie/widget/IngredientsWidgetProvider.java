@@ -21,36 +21,6 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
 
     static ArrayList<String> ingredientsList = new ArrayList<>();
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
-
-        Intent appIntent = new Intent(context, DetailActivity.class);
-        //call activity when widget is clicked, but resume activity from stack so you do not pass intent.extras afresh
-        appIntent.addCategory(Intent.ACTION_MAIN);
-        appIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        appIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setPendingIntentTemplate(R.id.widget_grid_view, appPendingIntent);
-
-        // Set the GridWidgetService intent to act as the adapter for the GridView
-        Intent intent = new Intent(context, GridWidgetService.class);
-        views.setRemoteAdapter(R.id.widget_grid_view, intent);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-
-    }
-
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-
-         // for (int appWidgetId : appWidgetIds) {
-            //updateAppWidget(context, appWidgetManager, ingredientsList, appWidgetId);
-       // }
-    }
-
     public static void updateBakingWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -58,30 +28,33 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {}
+
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
+
+        Intent intent = new Intent(context, GridWidgetService.class);
+        remoteViews.setRemoteAdapter(R.id.widget_grid_view, intent);
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
     @Override
-    public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
+    public void onEnabled(Context context) {}
+
+    @Override
+    public void onDisabled(Context context) {}
 
     @Override
     public void onReceive(Context context, Intent intent) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, IngredientsWidgetProvider.class));
-
         final String action = intent.getAction();
-
-           if (action.equals("android.appwidget.action.APPWIDGET_UPDATE2")) {
-               ingredientsList = intent.getExtras().getStringArrayList(FROM_ACTIVITY_INGREDIENTS_LIST);
-               appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
-               //Now update all widgets
-               IngredientsWidgetProvider.updateBakingWidgets(context, appWidgetManager, appWidgetIds);
-               super.onReceive(context, intent);
-           }
+        if (action.equals("android.appwidget.action.APPWIDGET_UPDATE2")) {
+            ingredientsList = intent.getExtras().getStringArrayList(FROM_ACTIVITY_INGREDIENTS_LIST);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
+            IngredientsWidgetProvider.updateBakingWidgets(context, appWidgetManager, appWidgetIds);
+            super.onReceive(context, intent);
+        }
     }
-
 }
 
