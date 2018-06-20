@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kartik.boulangerie.DetailActivity"
+    tools:context="com.example.kartik.boulangerie.ui.DetailActivity"
     android:weightSum="1">
 
     <FrameLayout

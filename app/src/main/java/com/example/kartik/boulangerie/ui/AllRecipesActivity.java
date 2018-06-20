@@ -1,4 +1,4 @@
-package com.example.kartik.boulangerie;
+package com.example.kartik.boulangerie.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,15 +13,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.kartik.boulangerie.Objects.Ingredient;
-import com.example.kartik.boulangerie.Objects.Recipe;
-import com.example.kartik.boulangerie.Objects.Step;
+import com.example.kartik.boulangerie.objects.Ingredient;
+import com.example.kartik.boulangerie.objects.Recipe;
+import com.example.kartik.boulangerie.objects.Step;
+import com.example.kartik.boulangerie.R;
+import com.example.kartik.boulangerie.adapters.AllRecipesAdapter;
+import com.example.kartik.boulangerie.adapters.AllRecipesGridAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AllRecipesActivity extends AppCompatActivity {
 
@@ -54,11 +60,11 @@ public class AllRecipesActivity extends AppCompatActivity {
 
         if(findViewById(R.id.all_recipes_recyclerview)!=null){
             phone = true;
-            recyclerView = (RecyclerView) findViewById(R.id.all_recipes_recyclerview);
+            recyclerView = ButterKnife.findById(this, R.id.all_recipes_recyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }else if(findViewById(R.id.all_recipes_gridview)!= null){
             phone = false;
-            gridView = (GridView)findViewById(R.id.all_recipes_gridview);
+            gridView = ButterKnife.findById(this, R.id.all_recipes_gridview);
         }
 
 

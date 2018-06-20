@@ -1,4 +1,4 @@
-package com.example.kartik.boulangerie;
+package com.example.kartik.boulangerie.ui;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.kartik.boulangerie.Objects.Recipe;
-import com.example.kartik.boulangerie.Objects.Step;
+import com.example.kartik.boulangerie.objects.Recipe;
+import com.example.kartik.boulangerie.objects.Step;
+import com.example.kartik.boulangerie.R;
 
 import java.util.ArrayList;
+
+import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -33,8 +36,8 @@ public class DetailActivity extends AppCompatActivity {
         totalSteps = steps.size();
         index = intent.getIntExtra("index", 0);
 
-        previous = (TextView) findViewById(R.id.prev_textview);
-        next = (TextView) findViewById(R.id.next_textView);
+        previous = ButterKnife.findById(this, R.id.prev_textview);
+        next = ButterKnife.findById(this, R.id.next_textView);
 
         if(index == -1) {
             setFragment(false);

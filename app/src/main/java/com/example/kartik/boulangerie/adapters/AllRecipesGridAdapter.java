@@ -1,4 +1,4 @@
-package com.example.kartik.boulangerie;
+package com.example.kartik.boulangerie.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.kartik.boulangerie.Objects.Recipe;
+import com.example.kartik.boulangerie.objects.Recipe;
+import com.example.kartik.boulangerie.R;
+import com.example.kartik.boulangerie.ui.RecipeOverviewActivity;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.kartik.boulangerie.Objects;
+package com.example.kartik.boulangerie.objects;
 
 import android.os.Parcel;
 import android.os.Parcelable;

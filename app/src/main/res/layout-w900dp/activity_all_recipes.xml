@@ -8,6 +8,6 @@
     android:numColumns="2"
     android:verticalSpacing="10dp"
     android:horizontalSpacing="10dp"
-    tools:context="com.example.kartik.boulangerie.AllRecipesActivity">
+    tools:context="com.example.kartik.boulangerie.ui.AllRecipesActivity">
 
 </GridView>

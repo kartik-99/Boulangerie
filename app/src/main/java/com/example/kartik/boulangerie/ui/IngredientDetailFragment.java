@@ -1,4 +1,4 @@
-package com.example.kartik.boulangerie;
+package com.example.kartik.boulangerie.ui;
 
 
 import android.os.Bundle;
@@ -9,10 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kartik.boulangerie.Objects.Ingredient;
-import com.example.kartik.boulangerie.Objects.Recipe;
+import com.example.kartik.boulangerie.objects.Ingredient;
+import com.example.kartik.boulangerie.objects.Recipe;
+import com.example.kartik.boulangerie.R;
+import com.example.kartik.boulangerie.adapters.IngredientAdapter;
 
 import java.util.ArrayList;
+
+import butterknife.ButterKnife;
 
 
 /**
@@ -46,7 +50,7 @@ public class IngredientDetailFragment extends Fragment {
 
         recipe = getArguments().getParcelable("recipe");
         ingredients = recipe.getIngredients();
-        recyclerView = (RecyclerView) view.findViewById(R.id.ingredients_recyclerview);
+        recyclerView = ButterKnife.findById(view, R.id.ingredients_recyclerview);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

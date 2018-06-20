@@ -1,9 +1,7 @@
-package com.example.kartik.boulangerie;
+package com.example.kartik.boulangerie.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -13,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.kartik.boulangerie.Objects.Recipe;
-import com.example.kartik.boulangerie.Objects.Step;
+import com.example.kartik.boulangerie.ui.DetailActivity;
+import com.example.kartik.boulangerie.objects.Recipe;
+import com.example.kartik.boulangerie.objects.Step;
+import com.example.kartik.boulangerie.R;
+import com.example.kartik.boulangerie.ui.StepDetailFragment;
 
 import java.util.ArrayList;
 

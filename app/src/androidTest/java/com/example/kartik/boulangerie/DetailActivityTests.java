@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.espresso.Espresso;
-import android.view.View;
 
-import com.example.kartik.boulangerie.Objects.Ingredient;
-import com.example.kartik.boulangerie.Objects.Recipe;
-import com.example.kartik.boulangerie.Objects.Step;
+import com.example.kartik.boulangerie.objects.Ingredient;
+import com.example.kartik.boulangerie.objects.Recipe;
+import com.example.kartik.boulangerie.objects.Step;
+import com.example.kartik.boulangerie.ui.DetailActivity;
 
-import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

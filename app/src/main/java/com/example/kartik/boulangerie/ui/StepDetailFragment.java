@@ -1,21 +1,17 @@
-package com.example.kartik.boulangerie;
+package com.example.kartik.boulangerie.ui;
 
-import android.app.Activity;
-import android.media.Image;
 import android.net.Uri;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.kartik.boulangerie.Objects.Step;
+import com.example.kartik.boulangerie.objects.Step;
+import com.example.kartik.boulangerie.R;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -32,6 +28,8 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+
+import butterknife.ButterKnife;
 
 
 public class StepDetailFragment extends Fragment {
@@ -58,12 +56,12 @@ public class StepDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
         step = getArguments().getParcelable("step");
-        description = (TextView) rootView.findViewById(R.id.item_detail);
+        description = ButterKnife.findById(rootView, R.id.item_detail);
         description.setText(step.getDescription());
 
 
-        thumbnail = (ImageView) rootView.findViewById(R.id.thumbnail);
-        notAvailable = (TextView) rootView.findViewById(R.id.not_available);
+        thumbnail = ButterKnife.findById(rootView, R.id.thumbnail);
+        notAvailable = ButterKnife.findById(rootView, R.id.not_available);
 
 
         // 1. Create a default TrackSelector
@@ -77,7 +75,7 @@ public class StepDetailFragment extends Fragment {
 // 3. Create the player
         player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
         simpleExoPlayerView = new SimpleExoPlayerView(getContext());
-        simpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.player_view);
+        simpleExoPlayerView = ButterKnife.findById(rootView, R.id.player_view);
 
 
 //Set media controller

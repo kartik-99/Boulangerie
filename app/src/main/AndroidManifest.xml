@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AllRecipesActivity">
+        <activity android:name=".ui.AllRecipesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,38 +19,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RecipeOverviewActivity"
+            android:name=".ui.RecipeOverviewActivity"
             android:label="@string/title_item_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DetailActivity"
+            android:name=".ui.DetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".RecipeOverviewActivity"
+            android:parentActivityName=".ui.RecipeOverviewActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.kartik.boulangerie.RecipeOverviewActivity" />
+                android:value="com.example.kartik.boulangerie.ui.RecipeOverviewActivity" />
         </activity>
 
-        <receiver android:name=".IngredientsWidget">
+        <service android:name=".widget.WidgetUpdateService" />
+
+        <service
+            android:name=".widget.GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver android:name=".widget.IngredientsWidgetProvider" android:icon="@drawable/ic_art_track_black_36dp">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE2" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/ingredients_widget_info" />
+                android:resource="@xml/baking_widget_info" />
         </receiver>
 
-        <service
-            android:name=".WidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <!--<activity android:name=".WidgetConfigActivity">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
-            </intent-filter>
-        </activity>-->
     </application>
 
 </manifest>

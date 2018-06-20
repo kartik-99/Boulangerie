@@ -1,4 +1,4 @@
-package com.example.kartik.boulangerie;
+package com.example.kartik.boulangerie.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.example.kartik.boulangerie.Objects.Recipe;
+import com.example.kartik.boulangerie.objects.Recipe;
+import com.example.kartik.boulangerie.R;
+import com.example.kartik.boulangerie.ui.RecipeOverviewActivity;
 
 import java.util.ArrayList;
 

@@ -10,7 +10,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="com.example.kartik.boulangerie.RecipeOverviewActivity">
+    tools:context="com.example.kartik.boulangerie.ui.RecipeOverviewActivity">
 
     <!--
     This layout is a two-pane layout for the Items
