@@ -1,60 +1,69 @@
-<LinearLayout
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.kartik.boulangerie.ui.StepDetailFragment"
-    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/not_available"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:gravity="center"
-            android:text="No video or thumbnail\navailable"
-            android:background="#000"
-            android:textColor="#fff"/>
-
-        <ImageView
-            android:id="@+id/thumbnail"
-            android:background="#000"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
-
-        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-            android:id="@+id/player_view"
-            android:focusable="true"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
-    </RelativeLayout>
-
-
-    <android.support.v7.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:elevation="10dp">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.kartik.boulangerie.ui.StepDetailFragment">
 
-        <ScrollView
+        <LinearLayout
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+
+            android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/item_detail"
-                style="?android:attr/textAppearanceLarge"
+                android:id="@+id/not_available"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp"
-                android:textIsSelectable="true" />
-        </ScrollView>
+                android:layout_height="200dp"
+                android:gravity="center"
+                android:text="No video or thumbnail\navailable"
+                android:background="#000"
+                android:textColor="#fff"/>
 
-    </android.support.v7.widget.CardView>
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:background="#000"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/player_view"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="invisible"/>
+        </RelativeLayout>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:elevation="10dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/item_detail"
+                    style="?android:attr/textAppearanceLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp"
+                    android:textIsSelectable="true" />
+            </ScrollView>
+
+        </android.support.v7.widget.CardView>
+
+
 
 
 </LinearLayout>
-
+    </ScrollView>
 

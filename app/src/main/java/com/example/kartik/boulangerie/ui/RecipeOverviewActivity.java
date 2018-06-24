@@ -1,8 +1,5 @@
 package com.example.kartik.boulangerie.ui;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,11 +12,13 @@ import android.view.View;
 import android.widget.TextView;
 
 
+import com.example.kartik.boulangerie.objects.Ingredient;
 import com.example.kartik.boulangerie.objects.Recipe;
 import com.example.kartik.boulangerie.R;
 import com.example.kartik.boulangerie.adapters.StepAdapter;
-import com.example.kartik.boulangerie.widget.IngredientsWidgetProvider;
-import com.example.kartik.boulangerie.widget.WidgetUpdateService;
+import com.example.kartik.boulangerie.widget.UpdateIngredientsService;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 public class RecipeOverviewActivity extends AppCompatActivity {
@@ -28,10 +27,18 @@ public class RecipeOverviewActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
+
     private boolean mTwoPane;
     static Recipe recipe;
     TextView ingredients_textview;
     FragmentTransaction ft;
+    ArrayList<String> widgetIngredients=new ArrayList<>();
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +53,8 @@ public class RecipeOverviewActivity extends AppCompatActivity {
 
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitle(recipe.getName());
 
         ingredients_textview = ButterKnife.findById(this, R.id.ingredients_textView);
@@ -70,21 +79,20 @@ public class RecipeOverviewActivity extends AppCompatActivity {
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
-        updateWorkoutsWidget(this);
+
+        ArrayList<Ingredient> ingredients = recipe.getIngredients();
+        Ingredient a;
+        for(int i = 0; i<ingredients.size(); i++){
+            a = ingredients.get(i);
+            widgetIngredients.add(a.getIngredient()+"\n"+Float.toString(a.getQuantity())+" "+a.getMeasure()+"\n");
+        }
+        UpdateIngredientsService.startBakingService(getApplication(), widgetIngredients);
+
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new StepAdapter(recipe.getSteps(), mTwoPane, this, recipe));
     }
 
-    public static void updateWorkoutsWidget(Context context) {
-        Intent intent = new Intent(context, IngredientsWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(WidgetUpdateService.FROM_ACTIVITY_INGREDIENTS_LIST, recipe.getIngredients());
-        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, IngredientsWidgetProvider.class));
-        if (ids != null && ids.length > 0) {
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-            context.sendBroadcast(intent);
-        }
-    }
+
 }

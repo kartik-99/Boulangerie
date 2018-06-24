@@ -2,6 +2,7 @@ package com.example.kartik.boulangerie.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -43,7 +44,7 @@ public class AllRecipesActivity extends AppCompatActivity {
     JSONArray ingredientArray, stepArray;
     RecyclerView recyclerView;
     AllRecipesAdapter recipesAdapter;
-    GridView gridView;
+    RecyclerView gridView;
     Boolean phone;
 
 
@@ -52,7 +53,6 @@ public class AllRecipesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_recipes);
-
 
         makeVolleyRequest(true);
 
@@ -66,8 +66,7 @@ public class AllRecipesActivity extends AppCompatActivity {
             phone = false;
             gridView = ButterKnife.findById(this, R.id.all_recipes_gridview);
         }
-
-
+        recipes.clear();
     }
 
     protected void makeVolleyRequest(final Boolean app) {
@@ -152,7 +151,9 @@ public class AllRecipesActivity extends AppCompatActivity {
             recipesAdapter = new AllRecipesAdapter(recipes, this, app);
             recyclerView.setAdapter(recipesAdapter);
         }else{
-            AllRecipesGridAdapter gridAdapter = new AllRecipesGridAdapter(this, recipes);
+            AllRecipesAdapter gridAdapter =  new AllRecipesAdapter(recipes, this, app);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+            gridView.setLayoutManager(mLayoutManager);
             gridView.setAdapter(gridAdapter);
         }
 

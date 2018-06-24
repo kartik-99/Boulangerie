@@ -32,10 +32,10 @@
                 android:value="com.example.kartik.boulangerie.ui.RecipeOverviewActivity" />
         </activity>
 
-        <service android:name=".widget.WidgetUpdateService" />
+        <service android:name=".widget.UpdateIngredientsService" />
 
         <service
-            android:name=".widget.GridWidgetService"
+            android:name=".widget.IngredientsGridWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".widget.IngredientsWidgetProvider" android:icon="@drawable/ingredients">

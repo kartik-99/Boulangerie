@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class AllRecipesAdapter extends RecyclerView.Adapter<AllRecipesAdapter.Re
         holder.title.setText(recipe.getName());
         summaryString = "("+recipe.getNoOfIngredients()+" ingredients, "+recipe.getNoOfSteps()+" steps)";
         holder.summary.setText(summaryString);
-        if(recipe.getImage()!=""){
+        if(!TextUtils.isEmpty(recipe.getImage())){
             Glide.with(context)
                     .load(recipe.getImage())
                     .listener(new RequestListener<String, GlideDrawable>() {

@@ -1,10 +1,14 @@
 package com.example.kartik.boulangerie.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,21 +28,32 @@ public class DetailActivity extends AppCompatActivity {
     int index, totalSteps;
     Recipe recipe;
     TextView previous, next;
+    String ingredients = "INGREDIENTS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Intent intent = getIntent();
-        recipe = intent.getParcelableExtra("recipe");
+        if(savedInstanceState!=null){
+            recipe = savedInstanceState.getParcelable("recipe");
+            index = savedInstanceState.getInt("index");
+        }else{
+            Intent intent = getIntent();
+            recipe = intent.getParcelableExtra("recipe");
+            index = intent.getIntExtra("index", 0);
+        }
+
         steps = recipe.getSteps();
         totalSteps = steps.size();
-        index = intent.getIntExtra("index", 0);
-
         previous = ButterKnife.findById(this, R.id.prev_textview);
         next = ButterKnife.findById(this, R.id.next_textView);
 
+        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar2);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle(recipe.getName());
+        toolbar.setTitleTextColor(Color.WHITE);
         if(index == -1) {
             setFragment(false);
             previous.setVisibility(View.INVISIBLE);
@@ -64,6 +79,12 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+        return true;
+    }
+
     public void loadPreviousStep(View view) {
         index--;
         if(index == -1){
@@ -87,5 +108,10 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("recipe", recipe);
+        outState.putInt("index", index);
+    }
 }

@@ -9,10 +9,19 @@
     tools:context="com.example.kartik.boulangerie.ui.DetailActivity"
     android:weightSum="1">
 
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        android:background="@color/colorPrimary">
+
+    </android.support.v7.widget.Toolbar>
     <FrameLayout
         android:id="@+id/item_detail_container"
         android:layout_width="match_parent"
-        android:layout_height="482dp"
+        android:layout_height="match_parent"
         android:layout_weight="0.90">
 
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.kartik.boulangerie.objects.Step;
 import com.example.kartik.boulangerie.R;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -39,68 +40,56 @@ public class StepDetailFragment extends Fragment {
     private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer player;
     ImageView thumbnail;
+    Uri videoUri = null;
+    BandwidthMeter bandwidthMeter;
 
-    public static StepDetailFragment newInstance(Step step){
-        StepDetailFragment detailFragment = new StepDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("step", step);
-        detailFragment.setArguments(bundle);
-        return detailFragment;
-    }
+    long position = C.POSITION_UNSET;
+    boolean playerState = true;
+    boolean fromSavedInstance = false;
+
+    String userAgent;
+    String stepObject = "STEP_OBJECT";
+    String currentPosition = "POSITION";
+    String currentState = "CURRENT_STATE";
 
     public StepDetailFragment(  ) {
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //variables initialization
+        if(savedInstanceState!=null){
+            step =  savedInstanceState.getParcelable(stepObject);
+            position = savedInstanceState.getLong(currentPosition);
+            playerState = savedInstanceState.getBoolean(currentState);
+            fromSavedInstance = true;
+        }else{
+            step = getArguments().getParcelable("step");
+            position = C.POSITION_UNSET;
+            playerState = true;
+            fromSavedInstance = false;
+        }
+        videoUri = Uri.parse(step.getVideoURL());
+        bandwidthMeter = new DefaultBandwidthMeter();
+
+        //view initialization
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
-
-        step = getArguments().getParcelable("step");
         description = ButterKnife.findById(rootView, R.id.item_detail);
-        description.setText(step.getDescription());
-
-
+        userAgent = Util.getUserAgent(getContext(), "Boulangerie");
         thumbnail = ButterKnife.findById(rootView, R.id.thumbnail);
         notAvailable = ButterKnife.findById(rootView, R.id.not_available);
-
-
-        // 1. Create a default TrackSelector
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
-// 2. Create a default LoadControl
-        LoadControl loadControl = new DefaultLoadControl();
-
-// 3. Create the player
-        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-        simpleExoPlayerView = new SimpleExoPlayerView(getContext());
         simpleExoPlayerView = ButterKnife.findById(rootView, R.id.player_view);
 
 
-//Set media controller
-        simpleExoPlayerView.setUseController(true);
-        simpleExoPlayerView.requestFocus();
-
-// Bind the player to the view.
-        simpleExoPlayerView.setPlayer(player);
-
-        String userAgent = Util.getUserAgent(getContext(), "Boulangerie");
-
-
-
-
-
+        //set up ui
+        description.setText(step.getDescription());
         if(!step.getVideoURL().startsWith("h")){
-
-
             if(step.getThumbnailURL().startsWith("h")){
-
                 simpleExoPlayerView.setVisibility(View.GONE);
                 thumbnail.setVisibility(View.VISIBLE);
                 notAvailable.setVisibility(View.GONE);
-
-
                 Glide.with(getContext())
                         .load(Uri.parse(step.getThumbnailURL()))
                         .into(thumbnail);
@@ -110,28 +99,98 @@ public class StepDetailFragment extends Fragment {
                 notAvailable.setVisibility(View.VISIBLE);
             }
         }else{
-
             simpleExoPlayerView.setVisibility(View.VISIBLE);
             thumbnail.setVisibility(View.GONE);
             notAvailable.setVisibility(View.GONE);
-
-
-
-            MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(step.getVideoURL()), new DefaultDataSourceFactory(
-                    getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
-            player.prepare(mediaSource);
-            player.setPlayWhenReady(true);
+            if(!fromSavedInstance){
+                initializePlayer();
+            }
         }
 
         return rootView;
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(stepObject, step);
+        outState.putLong(currentPosition, position);
+        outState.putBoolean(currentState, playerState);
+    }
+
+    public void initializePlayer(){
+        if(player == null){
+            TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+            TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+            LoadControl loadControl = new DefaultLoadControl();
+
+            player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+            simpleExoPlayerView.setPlayer(player);
+
+            MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(step.getVideoURL()), new DefaultDataSourceFactory(
+                    getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+            player.seekTo(position);
+            player.prepare(mediaSource);
+            player.setPlayWhenReady(playerState);
+        }
+
+    }
+    @Override
     public void onPause() {
         super.onPause();
-        player.stop();
-        player.release();
-        player = null;
-        step = null;
+        releasePlayer();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        releasePlayer();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    public static StepDetailFragment newInstance(Step step){
+        StepDetailFragment detailFragment = new StepDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("step", step);
+        detailFragment.setArguments(bundle);
+        return detailFragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23) {
+            initializePlayer();
+        }
+    }
+
+    void releasePlayer(){
+        if (player!=null) {
+            position = player.getCurrentPosition();
+            playerState = player.getPlayWhenReady();
+            player.stop();
+            player.release();
+            player = null;
+        }
+    }
+
 }
